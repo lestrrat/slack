@@ -83,6 +83,13 @@ func (h *Handler) validateToken(r *http.Request) bool {
 }
 
 func (h *Handler) InstallHandlers(s *server.Server) {
+	s.Handle("apps.permissions.info", http.HandlerFunc(h.HandleAppsPermissionsInfo))
+	s.Handle("apps.permissions.request", http.HandlerFunc(h.HandleAppsPermissionsRequest))
+	s.Handle("apps.permissions.resources.list", http.HandlerFunc(h.HandleAppsPermissionsResourcesList))
+	s.Handle("apps.permissions.scopes.list", http.HandlerFunc(h.HandleAppsPermissionsScopesList))
+	s.Handle("apps.permissions.users.list", http.HandlerFunc(h.HandleAppsPermissionsUsersList))
+	s.Handle("apps.permissions.users.request", http.HandlerFunc(h.HandleAppsPermissionsUsersRequest))
+	s.Handle("apps.uninstall", http.HandlerFunc(h.HandleAppsUninstall))
 	s.Handle("auth.revoke", http.HandlerFunc(h.HandleAuthRevoke))
 	s.Handle("auth.test", http.HandlerFunc(h.HandleAuthTest))
 	s.Handle("bots.info", http.HandlerFunc(h.HandleBotsInfo))
@@ -154,6 +161,181 @@ func (h *Handler) InstallHandlers(s *server.Server) {
 	s.Handle("users.profile.set", http.HandlerFunc(h.HandleUsersProfileSet))
 	s.Handle("users.setActive", http.HandlerFunc(h.HandleUsersSetActive))
 	s.Handle("users.setPresence", http.HandlerFunc(h.HandleUsersSetPresence))
+}
+
+// HandleAppsPermissionsInfo is the default handler method for the Slack apps.permissions.info API
+func (h *Handler) HandleAppsPermissionsInfo(w http.ResponseWriter, r *http.Request) {
+	if err := r.ParseForm(); err != nil {
+		http.Error(w, http.StatusText(http.StatusBadRequest), http.StatusBadRequest)
+		return
+	}
+	if !h.validateToken(r) {
+		http.Error(w, http.StatusText(http.StatusForbidden), http.StatusForbidden)
+		return
+	}
+	var c slack.AppsPermissionsInfoCall
+	if err := c.FromValues(r.Form); err != nil {
+		http.Error(w, http.StatusText(http.StatusBadRequest), http.StatusBadRequest)
+		return
+	}
+	var buf bytes.Buffer
+	if err := json.NewEncoder(&buf).Encode(StockResponse("apps.permissions.info")); err != nil {
+		http.Error(w, http.StatusText(http.StatusInternalServerError), http.StatusInternalServerError)
+		return
+	}
+	w.Header().Set(`Content-Type`, `application/json; charset=utf-8`)
+	w.WriteHeader(http.StatusOK)
+	buf.WriteTo(w)
+}
+
+// HandleAppsPermissionsRequest is the default handler method for the Slack apps.permissions.request API
+func (h *Handler) HandleAppsPermissionsRequest(w http.ResponseWriter, r *http.Request) {
+	if err := r.ParseForm(); err != nil {
+		http.Error(w, http.StatusText(http.StatusBadRequest), http.StatusBadRequest)
+		return
+	}
+	if !h.validateToken(r) {
+		http.Error(w, http.StatusText(http.StatusForbidden), http.StatusForbidden)
+		return
+	}
+	var c slack.AppsPermissionsRequestCall
+	if err := c.FromValues(r.Form); err != nil {
+		http.Error(w, http.StatusText(http.StatusBadRequest), http.StatusBadRequest)
+		return
+	}
+	var buf bytes.Buffer
+	if err := json.NewEncoder(&buf).Encode(StockResponse("apps.permissions.request")); err != nil {
+		http.Error(w, http.StatusText(http.StatusInternalServerError), http.StatusInternalServerError)
+		return
+	}
+	w.Header().Set(`Content-Type`, `application/json; charset=utf-8`)
+	w.WriteHeader(http.StatusOK)
+	buf.WriteTo(w)
+}
+
+// HandleAppsPermissionsResourcesList is the default handler method for the Slack apps.permissions.resources.list API
+func (h *Handler) HandleAppsPermissionsResourcesList(w http.ResponseWriter, r *http.Request) {
+	if err := r.ParseForm(); err != nil {
+		http.Error(w, http.StatusText(http.StatusBadRequest), http.StatusBadRequest)
+		return
+	}
+	if !h.validateToken(r) {
+		http.Error(w, http.StatusText(http.StatusForbidden), http.StatusForbidden)
+		return
+	}
+	var c slack.AppsPermissionsResourcesListCall
+	if err := c.FromValues(r.Form); err != nil {
+		http.Error(w, http.StatusText(http.StatusBadRequest), http.StatusBadRequest)
+		return
+	}
+	var buf bytes.Buffer
+	if err := json.NewEncoder(&buf).Encode(StockResponse("apps.permissions.resources.list")); err != nil {
+		http.Error(w, http.StatusText(http.StatusInternalServerError), http.StatusInternalServerError)
+		return
+	}
+	w.Header().Set(`Content-Type`, `application/json; charset=utf-8`)
+	w.WriteHeader(http.StatusOK)
+	buf.WriteTo(w)
+}
+
+// HandleAppsPermissionsScopesList is the default handler method for the Slack apps.permissions.scopes.list API
+func (h *Handler) HandleAppsPermissionsScopesList(w http.ResponseWriter, r *http.Request) {
+	if err := r.ParseForm(); err != nil {
+		http.Error(w, http.StatusText(http.StatusBadRequest), http.StatusBadRequest)
+		return
+	}
+	if !h.validateToken(r) {
+		http.Error(w, http.StatusText(http.StatusForbidden), http.StatusForbidden)
+		return
+	}
+	var c slack.AppsPermissionsScopesListCall
+	if err := c.FromValues(r.Form); err != nil {
+		http.Error(w, http.StatusText(http.StatusBadRequest), http.StatusBadRequest)
+		return
+	}
+	var buf bytes.Buffer
+	if err := json.NewEncoder(&buf).Encode(StockResponse("apps.permissions.scopes.list")); err != nil {
+		http.Error(w, http.StatusText(http.StatusInternalServerError), http.StatusInternalServerError)
+		return
+	}
+	w.Header().Set(`Content-Type`, `application/json; charset=utf-8`)
+	w.WriteHeader(http.StatusOK)
+	buf.WriteTo(w)
+}
+
+// HandleAppsPermissionsUsersList is the default handler method for the Slack apps.permissions.users.list API
+func (h *Handler) HandleAppsPermissionsUsersList(w http.ResponseWriter, r *http.Request) {
+	if err := r.ParseForm(); err != nil {
+		http.Error(w, http.StatusText(http.StatusBadRequest), http.StatusBadRequest)
+		return
+	}
+	if !h.validateToken(r) {
+		http.Error(w, http.StatusText(http.StatusForbidden), http.StatusForbidden)
+		return
+	}
+	var c slack.AppsPermissionsUsersListCall
+	if err := c.FromValues(r.Form); err != nil {
+		http.Error(w, http.StatusText(http.StatusBadRequest), http.StatusBadRequest)
+		return
+	}
+	var buf bytes.Buffer
+	if err := json.NewEncoder(&buf).Encode(StockResponse("apps.permissions.users.list")); err != nil {
+		http.Error(w, http.StatusText(http.StatusInternalServerError), http.StatusInternalServerError)
+		return
+	}
+	w.Header().Set(`Content-Type`, `application/json; charset=utf-8`)
+	w.WriteHeader(http.StatusOK)
+	buf.WriteTo(w)
+}
+
+// HandleAppsPermissionsUsersRequest is the default handler method for the Slack apps.permissions.users.request API
+func (h *Handler) HandleAppsPermissionsUsersRequest(w http.ResponseWriter, r *http.Request) {
+	if err := r.ParseForm(); err != nil {
+		http.Error(w, http.StatusText(http.StatusBadRequest), http.StatusBadRequest)
+		return
+	}
+	if !h.validateToken(r) {
+		http.Error(w, http.StatusText(http.StatusForbidden), http.StatusForbidden)
+		return
+	}
+	var c slack.AppsPermissionsUsersRequestCall
+	if err := c.FromValues(r.Form); err != nil {
+		http.Error(w, http.StatusText(http.StatusBadRequest), http.StatusBadRequest)
+		return
+	}
+	var buf bytes.Buffer
+	if err := json.NewEncoder(&buf).Encode(StockResponse("apps.permissions.users.request")); err != nil {
+		http.Error(w, http.StatusText(http.StatusInternalServerError), http.StatusInternalServerError)
+		return
+	}
+	w.Header().Set(`Content-Type`, `application/json; charset=utf-8`)
+	w.WriteHeader(http.StatusOK)
+	buf.WriteTo(w)
+}
+
+// HandleAppsUninstall is the default handler method for the Slack apps.uninstall API
+func (h *Handler) HandleAppsUninstall(w http.ResponseWriter, r *http.Request) {
+	if err := r.ParseForm(); err != nil {
+		http.Error(w, http.StatusText(http.StatusBadRequest), http.StatusBadRequest)
+		return
+	}
+	if !h.validateToken(r) {
+		http.Error(w, http.StatusText(http.StatusForbidden), http.StatusForbidden)
+		return
+	}
+	var c slack.AppsUninstallCall
+	if err := c.FromValues(r.Form); err != nil {
+		http.Error(w, http.StatusText(http.StatusBadRequest), http.StatusBadRequest)
+		return
+	}
+	var buf bytes.Buffer
+	if err := json.NewEncoder(&buf).Encode(StockResponse("apps.uninstall")); err != nil {
+		http.Error(w, http.StatusText(http.StatusInternalServerError), http.StatusInternalServerError)
+		return
+	}
+	w.Header().Set(`Content-Type`, `application/json; charset=utf-8`)
+	w.WriteHeader(http.StatusOK)
+	buf.WriteTo(w)
 }
 
 // HandleAuthRevoke is the default handler method for the Slack auth.revoke API

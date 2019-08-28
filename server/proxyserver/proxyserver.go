@@ -40,6 +40,13 @@ func (h *Handler) ProxyHandler(w http.ResponseWriter, r *http.Request) {
 }
 
 func (h *Handler) InstallHandlers(s *server.Server) {
+	s.Handle("apps.permissions.info", http.HandlerFunc(h.mock.HandleAppsPermissionsInfo))
+	s.Handle("apps.permissions.request", http.HandlerFunc(h.mock.HandleAppsPermissionsRequest))
+	s.Handle("apps.permissions.resources.list", http.HandlerFunc(h.mock.HandleAppsPermissionsResourcesList))
+	s.Handle("apps.permissions.scopes.list", http.HandlerFunc(h.mock.HandleAppsPermissionsScopesList))
+	s.Handle("apps.permissions.users.list", http.HandlerFunc(h.mock.HandleAppsPermissionsUsersList))
+	s.Handle("apps.permissions.users.request", http.HandlerFunc(h.mock.HandleAppsPermissionsUsersRequest))
+	s.Handle("apps.uninstall", http.HandlerFunc(h.mock.HandleAppsUninstall))
 	s.Handle("auth.revoke", http.HandlerFunc(h.mock.HandleAuthRevoke))
 	s.Handle("auth.test", http.HandlerFunc(h.ProxyHandler))
 	s.Handle("bots.info", http.HandlerFunc(h.ProxyHandler))
